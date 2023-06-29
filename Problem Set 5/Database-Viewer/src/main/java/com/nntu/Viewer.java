@@ -21,15 +21,15 @@ class Viewer extends JFrame {
 		connectToDatabase();
 
 		add.addActionListener((event) -> {
-			try (Statement statement = connection.createStatement()) {
+			String insertSql = "INSERT INTO birthdays (id, name, month) VALUES (?, ?, ?)";
+			try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
 				validateFieldsAreFilled(id, name, month);
 
-				statement.executeUpdate(
-						"INSERT INTO birthdays (id, name, month) VALUES ("
-								+ Integer.parseInt(id.getText())
-								+ ", '" + name + "', "
-								+ Integer.parseInt(month.getText()) + ");"
-				);
+				statement.setInt(1, Integer.parseInt(id.getText()));
+				statement.setString(2, name.getText());
+				statement.setInt(3, Integer.parseInt(month.getText()));
+
+				statement.executeUpdate();
 				status.setText("Successfully added a new entry.");
 			} catch (NumberFormatException nfe) {
 				status.setText("Please, use integers in `id` and `month` fields.");
@@ -42,19 +42,20 @@ class Viewer extends JFrame {
 		});
 
 		find.addActionListener((event) -> {
-			try (Statement statement = connection.createStatement()) {
+			String selectSql = "SELECT * FROM birthdays WHERE id = ?";
+			try (PreparedStatement statement = connection.prepareStatement(selectSql)) {
 				validateFieldsAreFilled(idToFind);
 
-				ResultSet result = statement.executeQuery(
-						"SELECT * FROM birthdays WHERE id = " + Integer.parseInt(idToFind.getText()) + ";"
-				);
+				statement.setInt(1, Integer.parseInt(idToFind.getText()));
 
-				if (result.next()) {
-					status.setText(
-							"The birthday of " + result.getString("name")
-									+ " is on " + result.getString("month") + " month."
-					);
-				} else status.setText("There's no entry with this id.");
+				try (ResultSet result = statement.executeQuery()) {
+					if (result.next()) {
+						status.setText(
+								"The birthday of " + result.getString("name")
+										+ " is on " + result.getString("month") + " month."
+						);
+					} else status.setText("There's no entry with this id.");
+				}
 			} catch (NumberFormatException nfe) {
 				status.setText("Please, use integer in `id` field.");
 			} catch (IllegalStateException ise) {
@@ -109,7 +110,7 @@ class Viewer extends JFrame {
 		}
 	}
 
- 	/**
+	/**
 	 * Checks components are not empty or blank.
 	 * @param components components to be checked
 	 */

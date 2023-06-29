@@ -1,7 +1,8 @@
+
 # Usage:
-- Open up Integral-Calculator folder in IDE.
-- Make sure you have JDK 11 (and higher) installed.
-- Just run the application and enjoy.
+- Open up Integral-Calculator folder in IDE
+- Make sure you have JDK 11 (and higher) installed
+- Just run the application and enjoy
 
 How it looks: 
 <p align="center">

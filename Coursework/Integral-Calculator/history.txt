@@ -5,3 +5,4 @@ Range: [-53.1229, 15]. Expression: tan(x). Answer: -53.12288287933672;
 Range: [65154879.3805, 91]. Expression: tan(x) + 4x^3. Answer: 6.5154879380462326E7;
 Range: [448.0320, 15]. Expression: 4x. Answer: 448.0319999999773;
 Range: [16.008, -3]. Expression: 4x. Answer: 16.008000000000877;
+Range: [0.168, 10]. Expression: sin(3x). Answer: 0.16781878350085727;
